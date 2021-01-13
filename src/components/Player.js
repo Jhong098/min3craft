@@ -4,6 +4,7 @@ import { Vector3 } from "three";
 import { useSphere } from "use-cannon";
 
 import { useKeyboardControls } from "../hooks/useKeyboardControls";
+import { FPVControls } from "./FPVControls";
 
 const SPEED = 6;
 
@@ -32,10 +33,14 @@ export const Player = (props) => {
       .applyEuler(camera.rotation);
 
     api.velocity.set(direction.x, velocity.current[1], direction.z);
+    if (jump && Math.abs(velocity.current[1].toFixed(2)) < 0.05) {
+      api.velocity.set(velocity.current[0], 8, velocity.current[2]);
+    }
   });
 
   return (
     <>
+      <FPVControls />
       <mesh ref={ref} />
     </>
   );

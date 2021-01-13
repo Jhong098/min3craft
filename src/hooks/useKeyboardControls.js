@@ -31,7 +31,15 @@ export const useKeyboardControls = () => {
     right: false,
     jump: false,
   });
-  const [setTexture] = useStore((state) => [state.setTexture]);
+  const [
+    setTexture,
+    resetWorld,
+    saveWorld,
+  ] = useStore(({ setTexture, resetWorld, saveWorld }) => [
+    setTexture,
+    resetWorld,
+    saveWorld,
+  ]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -44,6 +52,13 @@ export const useKeyboardControls = () => {
       }
       if (textureByKey(e.code)) {
         setTexture(textureByKey(e.code));
+        console.log(textureByKey(e.code));
+      }
+
+      // reset world on escape key pressed
+      if (e.keyCode === 27) {
+        resetWorld();
+        saveWorld();
       }
     };
 
@@ -62,7 +77,7 @@ export const useKeyboardControls = () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  });
+  }, [setTexture, resetWorld, saveWorld]);
 
   return movement;
 };
